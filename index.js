@@ -7,29 +7,17 @@ const customError = (data) => {
   return false
 }
 
-// Define custom parameters to be used by the adapter.
-// Extra parameters can be stated in the extra object,
-// with a Boolean value indicating whether or not they
-// should be required.
-const customParams = {
-  base: ['base', 'from', 'coin'],
-  quote: ['quote', 'to', 'market'],
-  endpoint: false
-}
+
 
 const createRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
-  const validator = new Validator(callback, input, customParams)
+  const validator = new Validator(callback, input)
   const jobRunID = validator.validated.id
-  const endpoint = validator.validated.data.endpoint || 'price'
-  const url = `https://min-api.cryptocompare.com/data/${endpoint}`
-  const fsym = validator.validated.data.base.toUpperCase()
-  const tsyms = validator.validated.data.quote.toUpperCase()
+  const symbol = validator.validated.data.symbol
+  const endTime = validator.validated.data.endTime
+  const startTime = validator.validated.data.startTime
+  const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1m&startTime=${startTime}&endTime=${endTime}`
 
-  const params = {
-    fsym,
-    tsyms
-  }
 
   // This is where you would add method and headers
   // you can add method like GET or POST and add it to the config
@@ -37,8 +25,7 @@ const createRequest = (input, callback) => {
   // method = 'get' 
   // headers = 'headers.....'
   const config = {
-    url,
-    params
+    url
   }
 
   // The Requester allows API calls be retry in case of timeout
