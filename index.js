@@ -7,7 +7,15 @@ const customError = (data) => {
   return false
 }
 
-
+// Define custom parameters to be used by the adapter.
+// Extra parameters can be stated in the extra object,
+// with a Boolean value indicating whether or not they
+// should be required.
+const customParams = {
+  endTime: '',
+  symbol: '',
+  startTime: ''
+}
 
 const createRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
